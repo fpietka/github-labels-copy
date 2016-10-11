@@ -7,7 +7,6 @@ This allow you to copy and/or update labels from a source repository
 to another.
 """
 
-from sys import exit
 from os import getenv
 from .__init__ import __version__
 import argparse
@@ -15,7 +14,6 @@ from .labels import Labels
 
 # to catch connection error
 import socket
-import github
 from github.GithubException import UnknownObjectException, TwoFactorException, \
     BadCredentialsException
 
