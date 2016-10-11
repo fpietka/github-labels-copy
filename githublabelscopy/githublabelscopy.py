@@ -14,8 +14,8 @@ from .labels import Labels
 
 # to catch connection error
 import socket
-from github.GithubException import UnknownObjectException, TwoFactorException, \
-    BadCredentialsException
+from github.GithubException import (UnknownObjectException, TwoFactorException,
+                                    BadCredentialsException)
 
 parser = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawTextHelpFormatter)
