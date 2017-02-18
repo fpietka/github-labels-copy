@@ -1,2 +1,2 @@
-PyGithub==1.25.2
+PyGithub==1.32
 wheel==0.24.0

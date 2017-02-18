@@ -13,7 +13,7 @@ setup(name='githublabelscopy',
       packages=find_packages(),
       long_description=open('README.rst').read(),
       install_requires=[
-          'PyGithub==1.25.2'
+          'PyGithub==1.32'
       ],
       entry_points={
           'console_scripts': [
