@@ -61,7 +61,7 @@ class Labels(object):
             working_label.edit(name, color)
 
     def deleteBad(self):
-        for name, color in self.getBad().items():
+        for name, _ in self.getBad().items():
             print("Deleting {}".format(name))
             working_label = next((x for x in self.dst_original_labels
                                   if x.name == name), None)
