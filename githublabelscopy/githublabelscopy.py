@@ -51,7 +51,7 @@ class NoCredentialException(Exception):
     pass
 
 
-def main():
+def label_copy():
     args = parser.parse_args()
     if args.login:
         labels = Labels(login=args.login)
@@ -77,9 +77,9 @@ def main():
         labels.fullCopy()
 
 
-if __name__ == '__main__':
+def main():
     try:
-        main()
+        label_copy()
     except socket.error as e:
         raise Exception('Connection error', e)
     except UnknownObjectException:
@@ -90,3 +90,7 @@ if __name__ == '__main__':
         raise Exception("Bad credentials")
     except NoCredentialException:
         raise Exception("Missing credentials")
+
+
+if __name__ == '__main__':
+    main()
