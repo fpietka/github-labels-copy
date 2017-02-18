@@ -1,3 +1,16 @@
+.. image:: https://landscape.io/github/fpietka/github-labels-copy/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/fpietka/github-labels-copy/master
+   :alt: Code Health
+.. image:: https://img.shields.io/pypi/v/githublabelscopy.svg
+   :target: https://pypi.python.org/pypi/githublabelscopy
+   :alt: Version
+.. image:: https://img.shields.io/pypi/pyversions/githublabelscopy.svg
+   :target: https://pypi.python.org/pypi/githublabelscopy
+   :alt: Python versions supported
+.. image:: https://img.shields.io/pypi/l/githublabelscopy.svg
+   :target: https://pypi.python.org/pypi/githublabelscopy
+   :alt: License
+
 ==================
 Github Labels Copy
 ==================
