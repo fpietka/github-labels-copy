@@ -8,7 +8,6 @@ to another.
 """
 
 from os import getenv
-from .__init__ import __version__
 import argparse
 from .labels import Labels
 
@@ -16,6 +15,8 @@ from .labels import Labels
 import socket
 from github.GithubException import (UnknownObjectException, TwoFactorException,
                                     BadCredentialsException)
+
+__version__ = '1.0.0'
 
 parser = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawTextHelpFormatter)
