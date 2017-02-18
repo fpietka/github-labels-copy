@@ -12,14 +12,7 @@ class Labels(object):
         if token:
             self.github = Github(token)
         elif login:
-            try:
-                self.github = Github(login, getpass())
-            except github.GithubException.TwoFactorException as e:
-                print(e.message)
-                exit(1)
-            except github.GithubException.BadCredentialsException as e:
-                print(e.message)
-                exit(1)
+            self.github = Github(login, getpass())
         else:
             self.github = Github()
 
