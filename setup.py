@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(name='githublabelscopy',
       version='1.0.0',
@@ -10,7 +10,7 @@ setup(name='githublabelscopy',
       author='François Pietka',
       author_email='francois[at]]pietka[dot]fr',
       license='MIT',
-      packages=find_packages(),
+      packages=['githublabelscopy'],
       long_description=open('README.rst').read(),
       install_requires=[
           'PyGithub==1.32'
