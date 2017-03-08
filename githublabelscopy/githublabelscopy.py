@@ -21,7 +21,7 @@ Options:
   --token=TOKEN     Github access token.
   --login=LOGIN     Github login, you will be prompted for password.
   --load=FILE       Load labels from a previous dump.
-  --dump            Dump labels into a json file.
+  --dump            Dump labels into a yaml file.
   -c                Create labels that are in source but not in destination
                     repository.
   -r                Remove labels that are in destination but not in source
