@@ -7,7 +7,7 @@ to another.
 
 Usage:
   github-labels-copy [--login=<login> | --token=<token>] [-crm]
-                     SOURCE DESTINATION
+                     (--load=<file> | SOURCE) (--dump | DESTINATION)
   github-labels-copy (-h | --help)
   github-labels-copy --version
 
@@ -20,6 +20,8 @@ Options:
   --version         Show version.
   --token=TOKEN     Github access token.
   --login=LOGIN     Github login, you will be prompted for password.
+  --load=FILE       Load labels from a previous dump.
+  --dump            Dump labels into a json file.
   -c                Create labels that are in source but not in destination
                     repository.
   -r                Remove labels that are in destination but not in source
@@ -40,6 +42,8 @@ from github.GithubException import (UnknownObjectException, TwoFactorException,
 
 __version__ = '1.0.0'
 
+dump_file = 'labels.yaml'
+
 
 class NoCredentialException(Exception):
     pass
@@ -58,8 +62,15 @@ def label_copy():
         else:
             raise NoCredentialException()
 
-    labels.setSrcRepo(args['SOURCE'])
-    labels.setDstRepo(args['DESTINATION'])
+    if args['--load']:
+        labels.load(args['--load'])
+    else:
+        labels.setSrcRepo(args['SOURCE'])
+
+    if args['--dump']:
+        labels.activateDumpMode()
+    else:
+        labels.setDstRepo(args['DESTINATION'])
 
     if args['-c']:
         labels.createMissing()
@@ -69,6 +80,11 @@ def label_copy():
         labels.updateWrong()
     if not args['-c'] and not args['-r'] and not args['-m']:
         labels.fullCopy()
+
+    if args['--dump']:
+        print('Dumping labels into {}'.format(dump_file))
+        with open(dump_file, 'w+') as fh:
+            fh.write(labels.dump())
 
 
 def main():
