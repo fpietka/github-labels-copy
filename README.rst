@@ -41,19 +41,24 @@ To copy labels between two repositories::
 
 There is also two identification modes:
 
-* -l, --login : using your Github username, you will be prompted for your password
-* -t, --token : provide your Github token
+* --login : using your Github username, you will be prompted for your password
+* --token : provide your Github token
 
 Alternatively you can set an environment variable called ``GITHUB_API_TOKEN``. Without any identification mode specified,
 it will automatically fallback on it.
+
+You can also dump/load labels:
+
+* --load : load labels from a previous dump (yaml file)
+* --dump : dump labels into a yaml file
 
 Options
 -------
 
 There are 3 non exclusive modes:
 
-* -c, --create : creates labels which don't exist on target repository
-* -r, --remove : remove labels on target repository  which don't exists on source repository
-* -m, --modify : modify labels which don't have the right color code on target repository
+* -c : creates labels which don't exist on target repository
+* -r : remove labels on target repository  which don't exists on source repository
+* -m : modify labels which don't have the right color code on target repository
 
 Default is full mode, which execute all those actions.
