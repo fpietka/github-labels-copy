@@ -4,8 +4,8 @@ from getpass import getpass
 
 class Labels(object):
     def __init__(self, token=None, login=None):
-        self.src_labels = list()
-        self.dst_labels = list()
+        self.src_labels = dict()
+        self.dst_labels = dict()
         self._identify(token, login)
 
     def _identify(self, token=None, login=None):
