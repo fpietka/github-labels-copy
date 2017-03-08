@@ -3,6 +3,7 @@
 
 from setuptools import setup
 
+
 setup(name='githublabelscopy',
       version='1.0.0',
       description='A tool to copy labels between repositories using Github API',
@@ -23,6 +24,7 @@ setup(name='githublabelscopy',
       },
       classifiers=[
           'Intended Audience :: Developers',
+          'License :: OSI Approved :: MIT License',
           'Environment :: Console',
           'Programming Language :: Python',
           'Programming Language :: Python :: 2.6',
