@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(name='githublabelscopy',
       version='1.0.0',
@@ -10,10 +10,11 @@ setup(name='githublabelscopy',
       author='François Pietka',
       author_email='francois[at]]pietka[dot]fr',
       license='MIT',
-      packages=find_packages(),
+      packages=['githublabelscopy'],
       long_description=open('README.rst').read(),
       install_requires=[
-          'PyGithub==1.32'
+          'PyGithub==1.32',
+          'docopt==0.6.2'
       ],
       entry_points={
           'console_scripts': [
@@ -28,6 +29,8 @@ setup(name='githublabelscopy',
           'Programming Language :: Python :: 2.7',
           'Programming Language :: Python :: 3',
           'Programming Language :: Python :: 3.3',
-          'Programming Language :: Python :: 3.4'
+          'Programming Language :: Python :: 3.4',
+          'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.6'
       ],
       zip_safe=True)

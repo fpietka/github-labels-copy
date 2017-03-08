@@ -1,14 +1,36 @@
 #!/usr/bin/env python
 
-"""
-Github Label Copy
+"""Github Label Copy
 
 This allow you to copy and/or update labels from a source repository
 to another.
+
+Usage:
+  github-labels-copy [--login=<login> | --token=<token>] [-crm]
+                     SOURCE DESTINATION
+  github-labels-copy (-h | --help)
+  github-labels-copy --version
+
+Arguments:
+  SOURCE        Source repository (e.g. user/repository)
+  DESTINATION   Destination repository (e.g. user/repository)
+
+Options:
+  -h --help         Show this screen.
+  --version         Show version.
+  --token=TOKEN     Github access token.
+  --login=LOGIN     Github login, you will be prompted for password.
+  -c                Create labels that are in source but not in destination
+                    repository.
+  -r                Remove labels that are in destination but not in source
+                    repository.
+  -m                Modify labels existing in both repositories but with a
+                    different color.
+
 """
 
 from os import getenv
-import argparse
+from docopt import docopt
 from .labels import Labels
 
 # to catch connection error
@@ -18,46 +40,17 @@ from github.GithubException import (UnknownObjectException, TwoFactorException,
 
 __version__ = '1.0.0'
 
-parser = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawTextHelpFormatter)
-
-parser.add_argument('--version', action='version',
-                    version='%(prog)s {version}'.format(version=__version__))
-
-# Mandatory arguments
-parser.add_argument('src_repo', metavar='src_repo', type=str,
-                    help='source repository')
-parser.add_argument('dst_repo', metavar='dst_repo', type=str,
-                    help='destination repository')
-
-# Optional arguments
-group = parser.add_mutually_exclusive_group()
-group.add_argument('-t', '--token', metavar='token', type=str, nargs='?',
-                   help='a token to identify on Github')
-group.add_argument('-l', '--login', metavar='login', type=str, nargs='?',
-                   help='a login to identify on Github')
-
-# Copy modes
-mode = parser.add_argument_group()
-# default = full (like -crm)
-mode.add_argument('-c', '--create', action='store_true',
-                  help='create new labels')
-mode.add_argument('-r', '--remove', action='store_true',
-                  help='remove old labels')
-mode.add_argument('-m', '--modify', action='store_true',
-                  help='modify changed labels')
-
 
 class NoCredentialException(Exception):
     pass
 
 
 def label_copy():
-    args = parser.parse_args()
-    if args.login:
-        labels = Labels(login=args.login)
-    elif args.token:
-        labels = Labels(token=args.token)
+    args = docopt(__doc__)
+    if args['--login']:
+        labels = Labels(login=args['--login'])
+    elif args['--token']:
+        labels = Labels(token=args['--token'])
     else:
         token = getenv('GITHUB_API_TOKEN')
         if token:
@@ -65,16 +58,16 @@ def label_copy():
         else:
             raise NoCredentialException()
 
-    labels.setSrcRepo(args.src_repo)
-    labels.setDstRepo(args.dst_repo)
+    labels.setSrcRepo(args['SOURCE'])
+    labels.setDstRepo(args['DESTINATION'])
 
-    if args.create:
+    if args['-c']:
         labels.createMissing()
-    if args.remove:
+    if args['-r']:
         labels.deleteBad()
-    if args.modify:
+    if args['-m']:
         labels.updateWrong()
-    if not args.create and not args.remove and not args.modify:
+    if not args['-c'] and not args['-r'] and not args['-m']:
         labels.fullCopy()
 
 
