@@ -1,12 +1,15 @@
 from github import Github
 from getpass import getpass
+import yaml
 
 
 class Labels(object):
     def __init__(self, token=None, login=None):
-        self.src_labels = list()
-        self.dst_labels = list()
+        self.src_labels = dict()
+        self.dst_labels = dict()
         self._identify(token, login)
+        self._dumpMode = False
+        self._labels = dict()
 
     def _identify(self, token=None, login=None):
         if token:
@@ -27,6 +30,16 @@ class Labels(object):
         self.dst_original_labels = self.dst_repo.get_labels()
         self.dst_labels = {label.name: label.color
                            for label in self.dst_original_labels}
+
+    def load(self, filename):
+        with open(filename, 'r') as fh:
+            self.src_labels = yaml.load(fh.read())
+
+    def activateDumpMode(self):
+        self._dumpMode = True
+
+    def dump(self):
+        return yaml.dump(self._labels)
 
     def listLabels(self):
         return self.src_labels
@@ -49,23 +62,32 @@ class Labels(object):
 
     def createMissing(self):
         "Create all missing labels from source repository in destination."
-        for name, color in self.getMissing().items():
-            print("Creating {}".format(name))
-            self.dst_repo.create_label(name, color)
+        missings = self.getMissing()
+        self._labels.update(missings)
+        if not self._dumpMode:
+            for name, color in missings.items():
+                print("Creating {}".format(name))
+                self.dst_repo.create_label(name, color)
 
     def updateWrong(self):
-        for name, color in self.getWrong().items():
-            print("Updating {}".format(name))
-            working_label = next((x for x in self.dst_original_labels
-                                  if x.name == name), None)
-            working_label.edit(name, color)
+        wrongs = self.getWrong()
+        self._labels.update(wrongs)
+        if not self._dumpMode:
+            for name, color in wrongs.items():
+                print("Updating {}".format(name))
+                working_label = next((x for x in self.dst_original_labels
+                                     if x.name == name), None)
+                working_label.edit(name, color)
 
     def deleteBad(self):
-        for name, _ in self.getBad().items():
-            print("Deleting {}".format(name))
-            working_label = next((x for x in self.dst_original_labels
-                                  if x.name == name), None)
-            working_label.delete()
+        bads = self.getBad()
+        self._labels.update(bads)
+        if not self._dumpMode:
+            for name, _ in bads.items():
+                print("Deleting {}".format(name))
+                working_label = next((x for x in self.dst_original_labels
+                                     if x.name == name), None)
+                working_label.delete()
 
     def fullCopy(self):
         self.createMissing()
