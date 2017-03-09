@@ -5,7 +5,7 @@ from setuptools import setup
 
 
 setup(name='githublabelscopy',
-      version='1.0.0',
+      version='1.1.0',
       description='A tool to copy labels between repositories using Github API',
       url='http://github.com/fpietka/github-labels-copy',
       author='François Pietka',

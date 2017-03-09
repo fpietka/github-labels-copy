@@ -40,7 +40,7 @@ import socket
 from github.GithubException import (UnknownObjectException, TwoFactorException,
                                     BadCredentialsException)
 
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 
 dump_file = 'labels.yaml'
 
