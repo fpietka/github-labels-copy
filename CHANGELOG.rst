@@ -1,3 +1,16 @@
+1.1.1
+=====
+
+Bug Fixes:
+----------
+
+* Add missing dependancy to PyYaml
+
+Internal Changes:
+-----------------
+
+* Upgrade PyGithub version from 1.32 to 1.34
+
 1.1.0
 =====
 
