@@ -14,7 +14,7 @@ setup(name='githublabelscopy',
       packages=['githublabelscopy'],
       long_description=open('README.rst').read(),
       install_requires=[
-          'PyGithub==1.34',
+          'PyGithub==1.55',
           'docopt==0.6.2',
           'PyYAML==3.12'
       ],

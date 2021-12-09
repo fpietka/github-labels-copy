@@ -22,13 +22,13 @@ class Labels(object):
     def setSrcRepo(self, repository):
         self.src_repo = self.github.get_repo(repository)
         src_original_labels = self.src_repo.get_labels()
-        self.src_labels = {label.name: label.color
+        self.src_labels = {label.name: {'color': label.color, 'description': label.description}
                            for label in src_original_labels}
 
     def setDstRepo(self, repository):
         self.dst_repo = self.github.get_repo(repository)
         self.dst_original_labels = self.dst_repo.get_labels()
-        self.dst_labels = {label.name: label.color
+        self.dst_labels = {label.name: {'color': label.color, 'description': label.description}
                            for label in self.dst_original_labels}
 
     def load(self, filename):
@@ -46,38 +46,54 @@ class Labels(object):
 
     def getMissing(self):
         "Get missing labels from source repository into destination."
-        return {name: color for name, color in self.src_labels.items()
-                if name not in self.dst_labels.keys()}
+        return {label_name: label_data for label_name, label_data in self.src_labels.items()
+                if label_name not in self.dst_labels.keys()}
 
-    def getWrong(self):
+    def getWrongColor(self):
         "Get labels with wrong color in destination repository from source."
-        return {name: color for name, color in self.src_labels.items()
-                if name in self.dst_labels.keys() and
-                color != self.dst_labels[name]}
+        return {label_name: label_data for label_name, label_data in self.src_labels.items()
+                if label_name in self.dst_labels.keys() and
+                label_data['color'] != self.dst_labels[label_name]['color']}
+    
+    def getWrongDescription(self):
+        "Get labels with wrong description in destination repository from source."
+        return {label_name: label_data for label_name, label_data in self.src_labels.items()
+                if label_name in self.dst_labels.keys() and
+                label_data['description'] != self.dst_labels[label_name]['description']}
 
     def getBad(self):
         "Get labels from destination repository not in source."
-        return {name: color for name, color in self.dst_labels.items()
-                if name not in self.src_labels.keys()}
+        return {label_name: label_data for label_name, label_data in self.dst_labels.items()
+                if label_name not in self.src_labels.keys()}
 
     def createMissing(self):
         "Create all missing labels from source repository in destination."
         missings = self.getMissing()
         self._labels.update(missings)
         if not self._dumpMode:
-            for name, color in missings.items():
-                print("Creating {}".format(name))
-                self.dst_repo.create_label(name, color)
+            for label_name, label_data in missings.items():
+                print("Creating {}".format(label_name))
+                self.dst_repo.create_label(label_name, label_data['color'], label_data['description'])
 
-    def updateWrong(self):
-        wrongs = self.getWrong()
+    def updateWrongColor(self):
+        wrongs = self.getWrongColor()
         self._labels.update(wrongs)
         if not self._dumpMode:
-            for name, color in wrongs.items():
-                print("Updating {}".format(name))
+            for label_name, label_data in wrongs.items():
+                print("Updating {}".format(label_name))
                 working_label = next((x for x in self.dst_original_labels
-                                     if x.name == name), None)
-                working_label.edit(name, color)
+                                     if x.name == label_name), None)
+                working_label.edit(label_name, label_data['color'], working_label.description)
+                
+    def updateWrongDescription(self):
+        wrongs = self.getWrongDescription()
+        self._labels.update(wrongs)
+        if not self._dumpMode:
+            for label_name, label_data in wrongs.items():
+                print("Updating {}".format(label_name))
+                working_label = next((x for x in self.dst_original_labels
+                                     if x.name == label_name), None)
+                working_label.edit(label_name, working_label.color, label_data['description'])
 
     def deleteBad(self):
         bads = self.getBad()
@@ -91,5 +107,6 @@ class Labels(object):
 
     def fullCopy(self):
         self.createMissing()
-        self.updateWrong()
+        self.updateWrongColor()
+        self.updateWrongDescription()
         self.deleteBad()
