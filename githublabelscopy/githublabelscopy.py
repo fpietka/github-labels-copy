@@ -6,7 +6,7 @@ This allow you to copy and/or update labels from a source repository
 to another.
 
 Usage:
-  github-labels-copy [--login=<login> | --token=<token>] [-crm]
+  github-labels-copy [--login=<login> | --token=<token>] [-crms]
                      (--load=<file> | SOURCE) (--dump | DESTINATION)
   github-labels-copy (-h | --help)
   github-labels-copy --version
@@ -28,6 +28,8 @@ Options:
                     repository.
   -m                Modify labels existing in both repositories but with a
                     different color.
+  -s                Modify descriptions existing in both repositories but
+                    with different content.
 
 """
 
@@ -77,8 +79,10 @@ def label_copy():
     if args['-r']:
         labels.deleteBad()
     if args['-m']:
-        labels.updateWrong()
-    if not args['-c'] and not args['-r'] and not args['-m']:
+        labels.updateWrongColors()
+    if args['-s']:
+        labels.updateWrongDescriptions()
+    if not args['-c'] and not args['-r'] and not args['-m'] and not args['-s']:
         labels.fullCopy()
 
     if args['--dump']:
